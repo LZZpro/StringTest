@@ -1,0 +1,12 @@
+server:
+  servlet:
+    context-path: /test
+  port: 8848
+
+spring:
+  application:
+    name: string-test
+
+logging:
+  level:
+    org.example.service: DEBUG
