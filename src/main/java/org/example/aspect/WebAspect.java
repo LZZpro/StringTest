@@ -1,7 +1,6 @@
 package org.example.aspect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.aspectj.lang.JoinPoint;
@@ -22,7 +21,6 @@ import java.util.Arrays;
  * @Describe:
  * @Date：2024/7/11 11:37
  */
-@Slf4j
 @Aspect
 @Component
 public class WebAspect {
