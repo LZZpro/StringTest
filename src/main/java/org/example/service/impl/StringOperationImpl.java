@@ -95,15 +95,14 @@ public class StringOperationImpl implements IStringOperation
                 i += count; //一步一步后移
             }
             result = sb.toString();
-            if (flag){
+            if (flag)
+            {
                 if (logger.isDebugEnabled())
                 {
                     logger.debug("->{}", result);
                 }
             }
         }while (flag);
-
-
         return result;
     }
 
