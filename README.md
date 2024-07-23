@@ -10,11 +10,11 @@ SpringBoot: 2.7.18
 
 外星时钟：
 
-![](C:\Users\m1785\Pictures\AlienClock.jpg)
+![](./images/AlienClock.jpg)
 
 外星时钟效果图：
 
-![](C:\Users\m1785\Pictures\外星时钟效果图.png)
+![](./images/外星时钟效果图.png)
 
 前端项目起步：
 
