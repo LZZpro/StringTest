@@ -2,11 +2,13 @@ server:
   servlet:
     context-path: /test
   port: 8848
-
+  error:
+    include-exception: true
+    include-message: always
 spring:
   application:
     name: string-test
 
 logging:
   level:
-    org.example.service: DEBUG
+    org.example.service: INFO

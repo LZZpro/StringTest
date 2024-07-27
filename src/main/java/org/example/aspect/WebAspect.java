@@ -38,7 +38,7 @@ public class WebAspect {
         Object[] objects = Arrays.stream(joinPoint.getArgs()).filter(object -> !(object instanceof HttpServletResponse)).toArray();
 
         // 打印请求 url、Http method、controller 的全路径以及执行方法、请求的IP、请求入参
-        logger.info(String.format("\n" +
+        logger.debug(String.format("\n" +
                         "========================================== Start ==========================================\n" +
                         "URL            : %s\n" +
                         "HTTP Method    : %s\n" +
@@ -52,7 +52,7 @@ public class WebAspect {
     @After("webLog()")
     public void doAfter() throws Throwable {
         // 每个请求之间空一行
-        logger.info("\n");
+        logger.debug("\n");
     }
 
     @Around("webLog()")
@@ -64,7 +64,7 @@ public class WebAspect {
         if (result instanceof R) {
             response = new ObjectMapper().writeValueAsString(result);
         }
-        logger.info(String.format("\n" +
+        logger.debug(String.format("\n" +
                         "Response Args  : %s\n" +
                         "Time-Consuming : %s ms\n" +
                         "=========================================== End ===========================================",

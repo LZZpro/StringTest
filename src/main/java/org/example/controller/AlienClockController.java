@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.domain.AlienTime;
+import org.example.domain.R;
 import org.example.filter.TimeBase;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -35,12 +36,11 @@ public class AlienClockController {
     @PostMapping("/set-alien-time")
     public void setAlienTime(@RequestBody Map<String, String> payload) {
         String userTime = payload.get("userTime");
-        if (!StringUtils.hasText(userTime))
-            throw new DateTimeException("传入时间不能为空");
         //设置外星时间为指定时间
-        TimeBase.currentAlienTime = AlienTime.parse(userTime);
+        TimeBase.currentAlienTime = AlienTime.string2AlienTime(userTime);
     }
 
+    //重置外星时钟为当前时间
     @GetMapping("/reset-alien-time")
     public Map<String, String> resetAlienTime()
     {
@@ -49,6 +49,19 @@ public class AlienClockController {
                 .plusSeconds(earthSeconds * 2);
         response.put("alienTime", TimeBase.currentAlienTime.toString());
         return response;
+    }
+
+    /**
+     * 验证输入的时间是否正确
+     * @param payload
+     * @return
+     */
+    @PostMapping("/validateTime")
+    public R<?> setAlarm(@RequestBody Map<String, String> payload)
+    {
+        String alarmTime = payload.get("alarmTime");
+        AlienTime alarm = AlienTime.string2AlienTime(alarmTime);
+        return R.ok(true);
     }
 
 
