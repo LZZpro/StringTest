@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.domain.AlienTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -34,5 +35,14 @@ public class StringOperationTest {
         System.out.println("Output:\t");
         String result = stringOperation.replaceConsecutiveByPreAlpha(str);
         System.out.println("result:"+result);
+    }
+
+    @Test
+    public void validateAlienTime()
+    {
+        String time = "2820-90-3016:90:26";
+        AlienTime parse = AlienTime.string2AlienTime(time);
+        System.out.println(parse.toString());
+
     }
 }

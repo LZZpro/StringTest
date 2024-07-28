@@ -9,65 +9,95 @@
 
       <h2>Set Alien Time</h2>
       <div class="input-group">
-        <input type="datetime-local" :step="1"  v-model="userTime">
-        <button @click="setAlienTime">Set Alien Time</button>
-        <button @click="resetAlienTime">Reset Alien Time</button>
+        <input placeholder="2820-06-32 12:00:00" size="20" v-model="userTime">
+        <button @click="setAlienTime">设置外星时钟</button>
+        <button @click="resetAlienTime">重置外星时钟</button>
       </div>
 
       <h2>Set Alien Time Alarm</h2>
       <div class="input-group">
-        <input type="datetime-local" :step="1"  v-model="userTime">
-        <button @click="setAlienAlarm">Set Alien Alarm(//todo)</button>
-
+        <input placeholder="2820-06-32 12:00:00" v-model="alarmTime">
+        <el-button :plain="true" @click="setAlienAlarm">设定闹钟</el-button>
+        <audio id="myAudio" src="/audio/TangTeacherWakeUp.m4a" controls autoplay></audio>
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import { ElMessage } from 'element-plus'
+
 export default {
   data() {
     return {
       alienTime: '',
       earthTime: '',
-      userTime: ''
+      userTime: '',
+      isAlarm: false,
+      alarmTime: ''
     };
   },
   methods: {
     fetchAlienTime() {
       axios.get('/test/api/alien-time')
-        .then(response => {
-          this.alienTime = response.data.alienTime;
-          this.earthTime = response.data.earthTime;
-        })
-        .catch(error => {
-          console.error(error);
+        .then(res => {
+          this.alienTime = res.data.data.alienTime;
+          this.earthTime = res.data.data.earthTime;
         });
     },
+    setAlienAlarm() {
+      axios.post('/test/api/validateTime', { alarmTime: this.alarmTime })
+        .then(res => {
+          if (res.data.data) {
+            ElMessage({
+              message: '闹钟设置成功',
+              type: 'success',
+            })
+          }else{
+            ElMessage.error(res.data.msg)
+          }
+        });
+
+    },
+    //设置外星时间为指定时间
     setAlienTime() {
       axios.post('/test/api/set-alien-time', { userTime: this.userTime })
-        .then(response => {
-          this.fetchAlienTime();
-        })
-        .catch(error => {
-          console.error(error);
+        .then(res => {
+          if (res.data.code !== 200) {
+            ElMessage.error(res.data.msg)
+          } else {
+            this.fetchAlienTime();
+          }
         });
     },
-    resetAlienTime(){
+    //重置外星时钟为当前外星时间
+    resetAlienTime() {
       axios.get('/test/api/reset-alien-time')
-      .then(response=>{
-        this.alienTime = response.data.alienTime;
-      })
-      .catch(error=>{
-        console.error(error);
-      })
-    }
+        .then(res => {
+          this.alienTime = res.data.data.alienTime;
+          ElMessage({
+              message: '重置成功',
+              type: 'success',
+            })
+        });
+    },
   },
   mounted() {
     this.fetchAlienTime();
     setInterval(this.fetchAlienTime, 500);
+  },
+  watch: {
+    //闹钟监听
+    alienTime(old, newAlienTime) {
+      if (newAlienTime === this.alarmTime) {
+        //音量50%
+        document.querySelector('audio').volume = 0.5;
+        //循环播放
+        document.querySelector('audio').loop = true;
+        document.querySelector('audio').play();
+      }
+    }
   }
 };
 </script>
