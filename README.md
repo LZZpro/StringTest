@@ -10,11 +10,11 @@ SpringBoot: 2.7.18
 
 外星时钟：
 
-![](./images/AlienClock.jpg)
+![](src/main/resources/images/AlienClock.jpg)
 
 外星时钟效果图：
 
-![](./images/外星时钟效果图.png)
+![](src/main/resources/images/外星时钟效果图.png)
 
 -----------------------------------------------
 最新更新时间：2024-27-28
