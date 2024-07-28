@@ -18,6 +18,9 @@ public class R<T> implements Serializable
     /** 失败 */
     public static final int FAIL = 500;
 
+    /** 时间解析失败***/
+    public static final int TIME_FAIL = 666;
+
     private int code;
 
     private String msg;
