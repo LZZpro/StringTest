@@ -67,6 +67,10 @@ export default {
           if (res.data.code !== 200) {
             ElMessage.error(res.data.msg)
           } else {
+            ElMessage({
+              message: '设置成功',
+              type: 'success',
+            })
             this.fetchAlienTime();
           }
         });
