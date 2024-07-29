@@ -89,7 +89,7 @@ export default {
   },
   mounted() {
     this.fetchAlienTime();
-    setInterval(this.fetchAlienTime, 500);
+    setInterval(this.fetchAlienTime, 1000);
   },
   watch: {
     //闹钟监听
