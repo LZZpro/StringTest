@@ -4,9 +4,6 @@ import org.example.exception.AlienTimeException;
 import org.example.filter.TimeBase;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 /**
  * @Author：Linzz
  * @Describe:
@@ -20,6 +17,8 @@ public class AlienTime {
     private  int hour;
     private  int minute;
     private  long second;
+    //基准时间换算成的秒数
+    private static final long baseAlienTimeTotalSecond =11332579104000L;
 
     public int getYear() {
         return this.year;
@@ -163,8 +162,11 @@ public class AlienTime {
        int minute = Integer.parseInt(sufArr[1]);
        int second = Integer.parseInt(sufArr[2]);
        AlienTime newTime = new AlienTime(year,month,day,hour,minute,second);
-       if (!isValid(newTime))
+        if (!isValid(newTime))
             throw new AlienTimeException("传入时间范围不正确！请查证外星时间范围");
+        if (!TimeBase.compareIsBig(newTime))
+            throw new AlienTimeException("不能设置时间比基准时间小，基准时间为：2804-18-31 2:2:88");
+
        return newTime;
     }
 
@@ -208,8 +210,32 @@ public class AlienTime {
        return false;
     }
 
-    public static boolean checkValid()
-    {
-        return false;
+    private static long getTotalSeconds(AlienTime time) {
+        long totalSeconds = 0;
+        // Convert years to seconds
+        totalSeconds += (long) time.getYear() * 18 * 770 * 36 * 90 * 90;
+        // Convert months to seconds
+        for (int i = 0; i < time.getMonth() - 1; i++) {
+            totalSeconds += DAYS_IN_MONTH[i] * 36 * 90 * 90;
+        }
+        // Convert days to seconds
+        totalSeconds += (long) (time.day - 1) * 36 * 90 * 90;
+
+        // Convert hours, minutes and seconds
+        totalSeconds += (long) time.hour * 90 * 90;
+        totalSeconds += time.minute * 90L;
+        totalSeconds += time.second;
+        return totalSeconds;
     }
+
+    /**
+     * 指定时间 - 基准时间 = 总秒数
+     * @param time
+     * @return
+     */
+    public static long getDifferenceInSecond(AlienTime time)
+    {
+        return getTotalSeconds(time) - baseAlienTimeTotalSecond ;
+    }
+
 }
